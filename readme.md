@@ -9,6 +9,7 @@
     -   [Particle System Class](#particle-system-class)
     -   [Particle Emitter Class](#particle-emitter-class)
     -   [Particle Class](#particle-class)
+    -   [Option Objects for each class](#object-objects)
 -   [Example Options Configurations](#example-options-configurations)
 -   [License](#license)
 
@@ -106,17 +107,17 @@ tick(timestamp) {
 
 Example of using a RequestAnimationFrame GameLoop to call the update method for the particle system
 
-the update() method for the particle system shoudld be the only update that is needed to be called from the loop, this will manage the updates on all emitters and particles tied to the entire Particle System
+the update() method for the particle system shoudld be the only update that is needed to be called from the loop, this will manage the updates on all emitters and particles tied to the entire Particle System.
+
+the parameter for the update method is the elapsed duration from the previous call in milliseconds... in this example, on a 60 fps gameloop, duration will be about 16ms each time through the loop.
 
 ### Particle Emitter Class
 
 #### Attributes
 
-#### emitterID
+#### emitterLabel
 
 #### texture
-
-#### emitterLabel
 
 #### lifespan
 
@@ -217,6 +218,14 @@ the update() method for the particle system shoudld be the only update that is n
 #### enableParticle()
 
 #### disableParticle()
+
+## Options Objects
+
+### Particle Options
+
+### Emitter Options
+
+### Particle System Options
 
 ## Example Options Configurations
 

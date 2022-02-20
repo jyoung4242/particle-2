@@ -1,19 +1,5 @@
 import { Vector } from './vector.js';
 
-/**
- * transforms: {
- * "velocity": {time: {start: 0,end: 0}, values: {start:0, end:0}},
- * "opacity": {time, {start: 0,end: 0}, values: {start:0, end:0}},
- * "color":{time, {start: 0,end: 0}, values: {start:0, end:0}},
- * "size" : {time, {start: 0,end: 0}, values: {start:0, end:0}},
- * "angle" : {time, {start: 0,end: 0}, values: {start:0, end:0}},
- * };
- * [
-        { x: 0, y: 0.3 },
-        { x: 0, y: 0.35 },
-        { x: 0, y: 0.45 },
-    ]
- */
 let snowParticleOptions = {
     texture: ['../assets/snowflake1.png', '../assets/snowflake2.png', '../assets/snowflake3.png'], //object for spritesheets, string for static image, or array of strings of images
     animation: false,

@@ -36,8 +36,6 @@ let smokeParticleOptions = {
     lifespan: [7, 7.25, 8.5, 8.75, 9, 9.5], //int, array, function
     parentElement: 'divworld',
     emitterLabel: 'smoke',
-    emitterID: '',
-    particleID: '',
     zindex: 2,
     gravity: 0, //int, array, function
     transforms: {
@@ -70,8 +68,6 @@ let fireParticleoptions = {
     lifespan: [1, 1.25, 1.5, 1.75, 2, 2.5], //int, array, function
     parentElement: 'divworld',
     emitterLabel: 'fire',
-    emitterID: '',
-    particleID: '',
     zindex: 1,
     gravity: 0, //int, array, function
     transforms: {
@@ -82,7 +78,6 @@ let fireParticleoptions = {
 
 export let smokeEmitter = {
     emitterLabel: 'smoke',
-    emitterID: '',
     numParticles: 400,
     burstCount: 1,
     emittingLocation: {},
@@ -103,7 +98,6 @@ export let smokeEmitter = {
 };
 
 export let fireEmitter = {
-    emitterID: '',
     emitterLabel: 'fire',
     numParticles: 50,
     burstCount: 1,

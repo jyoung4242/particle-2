@@ -1,7 +1,6 @@
 import { divParticle } from '../script.js';
 import { Vector } from './vector.js';
 
-let direction = 0;
 let myE;
 
 let fireworksParticleOptions = {
@@ -111,13 +110,8 @@ export let burstEmitterOptions = {
     particleOnCreate: part => {
         //based on position, set initial angle and velocity
         const cp = new Vector(myE.position.x + myE.size.x / 2, myE.position.y + myE.size.y / 2);
-        //console.log('cp:', cp.x, cp.y);
-        //console.log('particle position: ', part.position.x, part.position.y);
         let tempV = part.position.subtract(cp);
-        //console.log('tempV', tempV);
         let rads = Math.atan2(tempV.y, tempV.x);
-        let degs = rads * (180 / Math.PI);
-        //console.log('calculated starting angle: ', rads, 'rads, in degrees: ', degs);
         part.startingAngle = Math.atan2(tempV.y, tempV.x);
     },
     particleOnDestroy() {},
@@ -158,8 +152,3 @@ export let fireworksEmitterOptions = {
     texture: {},
     zindex: 1,
 };
-
-function degrees_to_radians(degrees) {
-    var pi = Math.PI;
-    return degrees * (pi / 180);
-}
