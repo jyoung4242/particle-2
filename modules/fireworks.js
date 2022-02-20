@@ -11,7 +11,7 @@ let fireworksParticleOptions = {
     loop: false,
     size: { x: 5, y: 5 }, //function, vector, array of vectors
     angle: 0,
-    angleVelocity: 0, //array, integer, function
+    angleVelocity: 0, //array, number, function
     velocity: function (a, p, d, s) {
         let x, y;
 
@@ -48,7 +48,7 @@ let burstParticleOptions = {
     loop: false,
     size: { x: 5, y: 5 }, //function, vector, array of vectors
     angle: 0,
-    angleVelocity: 0, //array, integer, function
+    angleVelocity: 0, //array, number, function
     velocity: function (a, p, d, s) {
         let magnitude = 6;
         let x, y;

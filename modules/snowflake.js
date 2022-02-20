@@ -13,7 +13,7 @@ let snowParticleOptions = {
         { x: 30, y: 30 },
     ], //function, vector, array of vectors
     angle: 0,
-    angleVelocity: [-1, -0.5, -0.25, 0, 0.25, 0.5, 1], //array, integer, function
+    angleVelocity: [-1, -0.5, -0.25, 0, 0.25, 0.5, 1], //array, number, function
     velocity: function (a, p, d, s) {
         let x, y;
         let arry = {

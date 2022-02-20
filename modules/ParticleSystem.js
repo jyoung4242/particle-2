@@ -400,7 +400,7 @@ export class ParticleEmitter {
             emitterElement.setAttribute('width', widthmag.toString());
             emitterElement.style.width = this.size.x;
         } else {
-            //integer value.
+            //number value.
             emitterElement.setAttribute('width', this.size.x.toString());
             emitterElement.style.width = `${this.size.y}px`;
         }
@@ -412,7 +412,7 @@ export class ParticleEmitter {
             emitterElement.setAttribute('height', heightmag.toString());
             emitterElement.style.height = this.size.y;
         } else {
-            //integer value.
+            //number value.
             emitterElement.setAttribute('height', this.size.y.toString());
             emitterElement.style.height = `${this.size.y}px`;
         }

@@ -24,7 +24,7 @@ let smokeParticleOptions = {
         { x: 75, y: 75 },
     ], //function, vector, array of vectors
     angle: 0,
-    angleVelocity: [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2], //array, integer, function
+    angleVelocity: [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2], //array, number, function
     velocity: function (a, p, d, s) {
         let x;
         x = Math.sin(degrees_to_radians(a) / 40);
@@ -56,7 +56,7 @@ let fireParticleoptions = {
         { x: 10, y: 10 },
     ], //function, vector, array of vectors
     angle: 0,
-    angleVelocity: [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2], //array, integer, function
+    angleVelocity: [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2], //array, number, function
     velocity: function (a, p, d, s) {
         let x;
         x = Math.sin(degrees_to_radians(a) / 6);
