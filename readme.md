@@ -2,11 +2,9 @@
 
 ## Contents
 
--   [Demo](https://blueimp.github.io/JavaScript-Templates/)
+-   [Demo](https://mydomparticlesystem.netlify.app/)
 -   [Description](#description)
 -   [Usage](#usage)
-    -   [Client-side](#client-side)
-    -   [Server-side](#server-side)
 -   [Requirements](#requirements)
 -   [API](#api)
     -   [tmpl() function](#tmpl-function)
