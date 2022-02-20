@@ -307,19 +307,41 @@ last paremeter is millisecond number that defines how fast the sequence changes 
 
 #### clipString
 
+String - this leverages CSS clip path attributes:
+
+This will apply a clip path string to the outer div object,so you can mask an image off if you would like. Good example clip string: "circle (40%)"
+
 #### blendStrength
 
+Number- a percent value - if transforming colors of your particle, this is the opacity factor applied to inner dive to allow the outerdiv color to pass through
+
+example:
+
+```js
+blendStrength: 50, //opacity of innerdiv
+```
+
 #### zindex
+
+number - CSS z index so you can control what layer your dom elements are on
 
 #### isLiving
 
+Boolean value - controls if this particle updates each loop, if false, then it is ignored
+
 #### position
+
+a Vector(x: 0, y:0) object that determines the overall location (x)(y) of the DOM object of the particles. this gets modified by velocity and gravity, and doesn't need to be initially set, but can be as a default value
 
 #### parentElement
 
-#### zindex
+String - The parentElement Attribute passed as a member of the options object during addEmitter method of a particle system. Is a string identifier for the id of the div element assigned to the particle system.
+
+All emitters and particles become children of the domParent
 
 #### loop
+
+Boolean value - if true, particles get reused and reset when lifespan completed, if false, particles get destroyed when lifespan completed
 
 #### Methods
 
@@ -329,9 +351,20 @@ last paremeter is millisecond number that defines how fast the sequence changes 
 
 #### removeParticle()
 
+takes no paremeters, and returns nothing:
+
+hides, sets living boolean to false, and removes particle form DOM
+managed by an emitter usually
+
 #### enableParticle()
 
+unhides particle, and set's living boolean to true
+managed by an emitter usually
+
 #### disableParticle()
+
+hides particle, and set's living boolean to false
+managed by an emitter usually
 
 ## Options Objects
 
