@@ -5,12 +5,17 @@
 -   [Demo](https://mydomparticlesystem.netlify.app/)
 -   [Description](#description)
 -   [Requirements](#requirements)
+-   [Variable Parameters](#variable-parameters)
+-   [Transforms](#transforms)
 -   [API](#api)
     -   [Particle System Class](#particle-system-class)
     -   [Particle Emitter Class](#particle-emitter-class)
     -   [Particle Class](#particle-class)
     -   [Option Objects for each class](#object-objects)
 -   [Example Options Configurations](#example-options-configurations)
+    -   [Bonfire Example](#bonfire-example)
+    -   [Falling Snow Example](#snowfall-example)
+    -   [Fireworks Example](#fireworks-example)
 -   [License](#license)
 
 ## Description
@@ -28,7 +33,92 @@ Both are included in the modules folder
 
 ## Variable Parameters
 
+There are several different parameters that can be passed either a discrete value, like a number, number, or string, or the can be passed and array of like values, or they can be passed a function
+
+Particle Parameters that are subject to this:
+size, texture, gravity, angleVelocity, velocity, lifespan
+
+if you pass an array of appropriate values, on the creation of the particle, it will randomly select on element of an array... this works well for textures if you want multiple image files used for particles.
+
+example:
+
+```js
+texture: ['../assets/snowflake1.png', '../assets/snowflake2.png', '../assets/snowflake3.png'],
+```
+
+So this lets a pool of different assets being used for the snow particles
+
+if you pass a function, example:
+
+```js
+ velocity: function (a, p, d, s) {
+        let magnitude = 6;
+        let x, y;
+        if (this.startingAngle) {
+            //console.log(`angle before components: ${this.startingAngle}`);
+            x = magnitude * Math.cos(this.startingAngle);
+            y = magnitude * Math.sin(this.startingAngle);
+            //console.log(`starting vector after calculation: x ${x}, y ${y}`);
+            let frameStep = (d * 3000) / 16;
+            y += frameStep * 0.01;
+        } else return { x: 0, y: 0 };
+
+        return { x: x, y: y };
+    }, //function, vector, array of vectors
+```
+
+depending on the parameter, it will either run this function every update, or just on initializationS
+
+size: runs once on creation
+
+velocity: updates each loop, returns new velocity vector each time
+requires parameters passed (a,p,d,s) so your function has access to
+angle, position, duration, and size parameters to use in your function
+returns vector object {x:0, y:0}
+
+texture: \*\*\*\* not recommended to use function - untested
+
+gravity:runs once on creation
+
+angleVelocity: updates each loop, returns new angle value each time
+requires parameters passed (v,p,d,s) so your function has access to
+velocity, position, duration, and size parameters to use in your function
+must return number
+
+lifespan: updates each loop, returns new angle value each time
+requires parameters passed (v,a,s,d) so your function has access to
+velocity, angle, size, and position parameters to use in your function
+must return number
+
 ## Transforms
+
+The transform object calls out different parameters that can be modified over the course of the lifespan of the particle
+
+it follows this patter:
+
+```js
+"param": {time: {start: 0 end: 0}},{values: {start: 0, end: 0}};
+```
+
+Parameters that can be interpolated over time:
+Velocity, Size, Angle, Color
+
+```js
+opacity: { time: { start: 0.7, end: 1 }, values: { start: 0.8, end: 0 } },
+size: { time: { start: 0.5, end: 1 }, values: { start: 1, end: 0.2 } },
+color: { time: { start: 0, end: 1 }, values: { start: '#C63347', end: '#f5e028' } },
+velocity: { time: { start: 0, end: 1 }, values: { start: Vector(1, 2), end: {x: 0, y:0} } },
+```
+
+the transform will interpolate between the start and end values, based on the start and end time provide
+start and end times are percent numbers
+
+for the size example above, for instance:
+
+the transform starts at 50% of the lifespan, and ends at the 100% of the lifespan
+during that period of time, it will scale size of the particle from 80% original size to 0% size
+
+vectors, colors, and numbers are all interpolated
 
 ## API
 
