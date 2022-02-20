@@ -33,15 +33,12 @@ let snowParticleOptions = {
     lifespan: 32, //int, array, function
     parentElement: 'divworld',
     emitterLabel: 'snowfall',
-    emitterID: '',
-    particleID: '',
     zindex: 2,
     gravity: 0, //int, array, function
     transforms: {}, // "param": {time: {start: 0 end: 0}},{values: {start: 0, end: 0}};
 };
 
 export let snowEmitterOptions = {
-    emitterID: '',
     emitterLabel: 'snowfall',
     numParticles: 600,
     burstCount: 1,

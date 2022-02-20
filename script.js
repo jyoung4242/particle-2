@@ -17,8 +17,7 @@ let particleSystemOptions = {
     particleOnDestroy: undefined,
     emitterOnCreate: undefined,
     emitterOnDestroy: undefined,
-    parentElement: '',
-    preload: '',
+    parentElement: 'divworld',
 };
 
 class GameLoop {

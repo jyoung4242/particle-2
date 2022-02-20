@@ -378,6 +378,7 @@ export class ParticleEmitter {
         this.loopCount = 0;
         this.burstCount = opt.burstCount;
         this.redrawFlag = true;
+        this.emittingPoint = opt.emittingPoint;
     }
 
     create_DOM_structure() {
@@ -518,7 +519,7 @@ export class ParticleEmitter {
     getNextStartingPoint() {
         switch (this.shape) {
             case 'point':
-                return this.position.add(emittingPoint);
+                return this.position.add(this.emittingPoint);
 
             case 'circle':
                 const cp = new Vector(this.position.x + this.size.x / 2, this.position.y + this.size.y / 2);
