@@ -26,15 +26,6 @@ function degrees_to_radians(degrees) {
 }
 
 export class Particle {
-    assetAnimationSprite;
-    animationTimer;
-    animationSequence;
-    activeVtransform;
-    activeAtransform;
-    trueVelocity;
-    trueAngle;
-    trueSize;
-    trueLivespan;
     constructor(pOptions) {
         //required params
         if (!pOptions.parentElement) return null;
@@ -126,10 +117,6 @@ export class Particle {
                     return arg[index];
                 }
                 if (arg instanceof Vector) return arg;
-
-                /** TODO
-                 * add additional conditions here as necesssary
-                 */
                 return arg;
             default:
                 //int or string
@@ -193,7 +180,6 @@ export class Particle {
                     break;
             }
         }
-
         return this.trueVelocity;
     }
 
@@ -289,6 +275,11 @@ export class Particle {
         this.domhandle.classList.remove('hidden');
     }
 
+    disableParticle() {
+        this.isLiving = false;
+        this.domhandle.classList.add('hidden');
+    }
+
     removeParticle() {
         this.isLiving = false;
         this.domhandle.classList.add('hidden');
@@ -352,29 +343,7 @@ export class Particle {
     }
 }
 
-/**
- * TODO:
-    refactor update function
-    remove initialize velocity transform
-    remove reading dom from update routine
-    
-* */
-
 export class ParticleEmitter {
-    particles;
-    deadpool;
-    deadpoolSize;
-    numParticles;
-    qtyParticles;
-    updateDuration;
-    particleOnCreate;
-    particleOnDestroy;
-    initialVelocityTransform;
-    particleOptions;
-    domhandle;
-    emissionTimer;
-    redrawFlag;
-
     constructor(eOptions) {
         this.initialize_constructor(eOptions);
         this.create_DOM_structure();
@@ -399,10 +368,7 @@ export class ParticleEmitter {
         this.emitRate = opt.emitRate;
         this.particleOnCreate = opt.particleOnCreate;
         this.particleOnDestroy = opt.particleOnDestroy;
-        if (opt.initialVelocityTransform != {}) this.initialVelocityTransform = opt.initialVelocityTransform;
-        this.initialVelocityTransform = null;
         this.numParticles = opt.numParticles;
-        this.mode = opt.mode;
         this.parentElement = opt.parentElement;
         this.particleOptions = opt.particleOptions;
         this.emissionTimer = 0;
@@ -508,7 +474,6 @@ export class ParticleEmitter {
     resetParticle(particle) {
         let index = this.particles.indexOf(particle);
         this.particles[index].position = this.getNextStartingPoint();
-        if (this.initialVelocityTransform != null) this.particles[index].velocity = this.initialVelocityTransform();
         this.particles[index].duration = 0;
         if (this.particleOnCreate) this.particleOnCreate(this.particles[index]);
     }
@@ -626,14 +591,12 @@ export class ParticleEmitter {
                         if (this.burstCount > 1) {
                             for (let burst = this.burstCount; burst >= 0; burst--) {
                                 this.particleOptions.position = this.getNextStartingPoint();
-                                if (this.initialVelocityTransform != null) this.particleOptions.velocity = this.initialVelocityTransform();
                                 this.particleOptions.emitterID = this.emitterID;
                                 this.addParticle(this.particleOptions);
                             }
                             this.loopCount += 1;
                         } else {
                             this.particleOptions.position = this.getNextStartingPoint();
-                            if (this.initialVelocityTransform != null) this.particleOptions.velocity = this.initialVelocityTransform();
                             this.particleOptions.emitterID = this.emitterID;
                             this.addParticle(this.particleOptions);
                             this.loopCount += 1;
@@ -657,18 +620,6 @@ export class ParticleEmitter {
 }
 
 export class ParticleSystem {
-    updateDuration;
-    #emitters;
-    #particles;
-    #pOnCreate;
-    #pOnDestroy;
-    #eOnCreate;
-    #eOnDestroy;
-    #texturePreload;
-    #preloadComplete = false;
-    #domParent;
-    #preLoadImage;
-
     constructor(psOptions) {
         //load defaults
         if (!psOptions.parentElement) return null; //gaurd condition for one required param
@@ -677,27 +628,7 @@ export class ParticleSystem {
         this.pOnDestroy = psOptions.particleOnDestroy ? psOptions.particleOnDestroy : undefined;
         this.eOnCreate = psOptions.emitterOnCreate ? psOptions.emitterOnCreate : undefined;
         this.eOnDestroy = psOptions.emitterOnDestroy ? psOptions.emitterOnDestroy : undefined;
-        this.texturePreload = psOptions.preload ? psOptions.preload : '';
-        this.emitterCount = 0;
-        this.particleCount = 0;
         this.id = 'pSystem_' + uid(16);
-
-        if (this.texturePreload) {
-            //add image element to load against
-            this.preLoadImage = document.createElement('img');
-            this.preLoadImage.setAttribute('id', 'preload');
-            this.preLoadImage.setAttribute('src', this.texturePreload);
-            this.preLoadImage.setAttribute('class', 'hidden');
-            this.preLoadImage.setAttribute('onload', this.loadImage());
-            document.getElementById(this.domParent).appendChild(this.preLoadImage);
-        } else {
-            this.preloadComplete = true;
-        }
-
-        //wait for texture loading
-        while (!this.preloadComplete) {
-            const flag = this.preloadComplete;
-        }
 
         //define arrays
         this.emitters = [];
@@ -707,10 +638,6 @@ export class ParticleSystem {
     static create(options) {
         //do your data validation
         return new ParticleSystem(options);
-    }
-
-    loadImage() {
-        this.preloadComplete = true;
     }
 
     addEmitter(eOptions) {
@@ -743,7 +670,6 @@ export class ParticleSystem {
     }
 
     update(time) {
-        let timestamp = performance.now();
         this.emitters.forEach(emitter => {
             let rslt = emitter.update(time);
             if (rslt == -1) this.removeEmitter(emitter);
@@ -753,7 +679,6 @@ export class ParticleSystem {
             let rslt = particle.update(time);
             if (rslt == -1) this.removeParticle(particle);
         });
-        this.updateDuration = Math.floor(performance.now() - timestamp).toFixed(2);
     }
 }
 

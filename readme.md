@@ -7,11 +7,8 @@
 -   [Requirements](#requirements)
 -   [API](#api)
     -   [Particle System Class](#particle-system-class)
-    -   [Templates cache](#templates-cache)
-    -   [Output encoding](#output-encoding)
-    -   [Local helper variables](#local-helper-variables)
-    -   [Template function argument](#template-function-argument)
-    -   [Template parsing](#template-parsing)
+    -   [Particle Emitter Class](#particle-emitter-class)
+    -   [Particle Class](#particle-class)
 -   [Example Options Configurations](#example-options-configurations)
 -   [License](#license)
 
@@ -32,7 +29,113 @@ Both are included in the modules folder
 
 ### Particle System Class
 
+#### Attributes
+
+domParent
+pOnCreate()
+pOnDestroy()
+eOnCreate()
+eOnDestroy()
+id
+emitters [] array
+particles [] array
+
+#### Methods
+
+External Methods:
+static create(options)
+addParticle(options)
+removeParticle(particle)
+addEmitter(options)
+removeEmitter(emitter)
+update(time)
+
+### Particle Emitter Class
+
+#### Attributes
+
+emitterID
+texture
+emitterLabel
+particles [];
+deadpool [];
+lifespan
+isEnabled
+shape
+size
+position
+emitRate
+particleOnCreate ()
+particleOnDestroy ()
+numParticles
+parentElement
+particleOptions
+emissionTimer
+region
+zindex
+loop
+burstCount
+
+#### Methods
+
+External Methods:
+static create(options)
+enableEmitter()
+disableEmitter()
+destroyEmitter()
+
+### Particle Class
+
+#### Attributes
+
+emitterID
+emitterLabel
+particleID
+size
+texture
+gravity
+angleVelocity
+angle
+velocity
+lifespan
+animate
+animationObject
+clipString
+blendStrength
+zindex
+isLiving
+position
+parentElement
+zindex
+loop
+
+#### Methods
+
+External Methods:
+static create(options)
+removeParticle()
+enableParticle()
+disableParticle()
+
 ## Example Options Configurations
+
+### Bonfire Example
+
+#### Emitters
+
+#### Particles
+
+### Snowfall Example
+
+#### Emitters
+
+#### Particles
+
+### Fireworks Example
+
+#### Emitters
+
+#### Particles
 
 ## License
 
