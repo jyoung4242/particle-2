@@ -6,16 +6,13 @@
 -   [Description](#description)
 -   [Requirements](#requirements)
 -   [API](#api)
-    -   [tmpl() function](#tmpl-function)
+    -   [Particle System Class](#particle-system-class)
     -   [Templates cache](#templates-cache)
     -   [Output encoding](#output-encoding)
     -   [Local helper variables](#local-helper-variables)
     -   [Template function argument](#template-function-argument)
     -   [Template parsing](#template-parsing)
--   [Templates syntax](#templates-syntax)
-    -   [Interpolation](#interpolation)
-    -   [Evaluation](#evaluation)
--   [Example Options Configurations](#example-templates)
+-   [Example Options Configurations](#example-options-configurations)
 -   [License](#license)
 
 ## Description
@@ -32,6 +29,8 @@ Vector.js and Spritesheet.js, which are just formatted out for convenience
 Both are included in the modules folder
 
 ## API
+
+### Particle System Class
 
 ## Example Options Configurations
 
