@@ -1,0 +1,40 @@
+body {
+    box-sizing: border-box;
+}
+#divworld {
+    position: absolute;
+    background-color: black;
+    top: 5px;
+    left: 5px;
+    width: 1200px;
+    height: 700px;
+    border: 1px solid black;
+    overflow: hidden;
+}
+
+.hidden {
+    display: none;
+}
+
+#fire {
+    position: absolute;
+    width: 175px;
+    height: 175px;
+    background-image: url('./assets/campfire.png');
+    background-size: cover;
+    top: 70%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 0;
+}
+
+#fps {
+    position: absolute;
+    top: 715px;
+    left: 15px;
+}
+#selectparticle {
+    position: absolute;
+    top: 735px;
+    left: 15px;
+}
