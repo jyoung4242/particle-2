@@ -15,8 +15,7 @@
 -   [Templates syntax](#templates-syntax)
     -   [Interpolation](#interpolation)
     -   [Evaluation](#evaluation)
--   [Compiled templates](#compiled-templates)
--   [Tests](#tests)
+-   [Example Options Configurations](#example-templates)
 -   [License](#license)
 
 ## Description
@@ -34,9 +33,11 @@ Both are included in the modules folder
 
 ## API
 
+## Example Options Configurations
+
 ## License
 
-Copyright 2022 <COPYRIGHT JUSTIN YOUNG>
+Copyright 2022 by Justin Young
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
