@@ -59,15 +59,54 @@ by default null, but you can pass a function to this options object during the n
 
 #### static create(options)
 
+```js
+divParticle = ParticleSystem.create(particleSystemOptions);
+```
+
+the create method, with the options object passed, will instance the new Particle system
+
 #### addParticle(options)
+
+the addParticle method, with the particle options object passed, will create a particle tied to the Particle system itself as the sole emitter. This will add the particle instance to the update array of particles, and create the DOM object for the particle
 
 #### removeParticle(particle)
 
+the removeParticle method, with the particle instance passed, will remove a particle tied to the Particle system. This will remove the instance from the update array, and remove the element from the DOM
+
 #### addEmitter(options)
+
+the addEmitter method, with the emitter options object passed, will create a emitter instance tied to the Particle system itself. This will add the emitter instance to the update array of emitter, and create the DOM object for the emitter. The emitter instance will manage all the particles that are configured for that specific emitter.
 
 #### removeEmitter(emitter)
 
+the removeEmitter method, with the emitter instance passed, will remove an emitter tied to the Particle system. This will remove the instance from the update array, and remove the element from the DOM
+
 #### update(time)
+
+```js
+tick(timestamp) {
+        const deltaTime = (timestamp - this.lastTime) / 1000;
+        this.lastTime = timestamp;
+        this.fpsTimer += deltaTime;
+        this.frameCounter++;
+
+        if (this.fpsTimer > 1) {
+            this.fps = this.frameCounter;
+            this.frameCounter = this.fpsTimer = 0;
+
+            fpsElem.innerHTML = `FPS: ${this.fps}`;
+        }
+        divParticle.update(deltaTime);
+
+        if (this.running) {
+            requestAnimationFrame(this.tick.bind(this));
+        }
+    }
+```
+
+Example of using a RequestAnimationFrame GameLoop to call the update method for the particle system
+
+the update() method for the particle system shoudld be the only update that is needed to be called from the loop, this will manage the updates on all emitters and particles tied to the entire Particle System
 
 ### Particle Emitter Class
 
