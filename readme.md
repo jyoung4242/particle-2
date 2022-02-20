@@ -22,8 +22,15 @@
 
 ## Description
 
-1KB lightweight, fast & powerful JavaScript templating engine with zero
-dependencies.  
-Compatible with server-side environments like [Node.js](https://nodejs.org/),
-module loaders like [RequireJS](https://requirejs.org/) or
-[webpack](https://webpack.js.org/) and all web browsers.
+17KB lightweight, fast & powerful JavaScript particle library
+Allows for individual particle control, and complete emitter systems.
+Can pass descrete values, arrays of values, or pass functions that control
+specific parameters
+
+## Requirements
+
+Currently there are two .js module dependencies, which may change in future
+Vector.js and Spritesheet.js, which are just formatted out for convenience
+Both are included in the modules folder
+
+## API
