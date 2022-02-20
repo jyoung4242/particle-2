@@ -33,13 +33,25 @@ Both are included in the modules folder
 
 #### domParent
 
+The domParent Attribute passed as a member of the options object during the new instancing of the Particle System Class is a string identifier for the id of the div element assigned to the particle system.
+
+All emitters and particles become children of the domParent
+
 #### pOnCreate()
+
+by default null, but you can pass a function to this options object during the new instancing of the Particle System Class. This function will run immediately after a particle is created.
 
 #### pOnDestroy()
 
+by default null, but you can pass a function to this options object during the new instancing of the Particle System Class. This function will run immediately before a particle is destroyed.
+
 #### eOnCreate()
 
+by default null, but you can pass a function to this options object during the new instancing of the Particle System Class. This function will run immediately after an emitter is created.
+
 #### eOnDestroy()
+
+by default null, but you can pass a function to this options object during the new instancing of the Particle System Class. This function will run immediately before an emitter is destroyed.
 
 #### Methods
 
@@ -66,10 +78,6 @@ Both are included in the modules folder
 #### texture
 
 #### emitterLabel
-
-#### particles [];
-
-#### deadpool [];
 
 #### lifespan
 
