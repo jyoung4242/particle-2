@@ -31,91 +31,145 @@ Both are included in the modules folder
 
 #### Attributes
 
-domParent
-pOnCreate()
-pOnDestroy()
-eOnCreate()
-eOnDestroy()
-id
-emitters [] array
-particles [] array
+#### domParent
+
+#### pOnCreate()
+
+#### pOnDestroy()
+
+#### eOnCreate()
+
+#### eOnDestroy()
 
 #### Methods
 
-External Methods:
-static create(options)
-addParticle(options)
-removeParticle(particle)
-addEmitter(options)
-removeEmitter(emitter)
-update(time)
+#### External Methods:
+
+#### static create(options)
+
+#### addParticle(options)
+
+#### removeParticle(particle)
+
+#### addEmitter(options)
+
+#### removeEmitter(emitter)
+
+#### update(time)
 
 ### Particle Emitter Class
 
 #### Attributes
 
-emitterID
-texture
-emitterLabel
-particles [];
-deadpool [];
-lifespan
-isEnabled
-shape
-size
-position
-emitRate
-particleOnCreate ()
-particleOnDestroy ()
-numParticles
-parentElement
-particleOptions
-emissionTimer
-region
-zindex
-loop
-burstCount
+#### emitterID
+
+#### texture
+
+#### emitterLabel
+
+#### particles [];
+
+#### deadpool [];
+
+#### lifespan
+
+#### isEnabled
+
+#### shape
+
+#### size
+
+#### position
+
+#### emitRate
+
+#### particleOnCreate ()
+
+#### particleOnDestroy ()
+
+#### numParticles
+
+#### parentElement
+
+#### particleOptions
+
+#### emissionTimer
+
+#### region
+
+#### zindex
+
+#### loop
+
+#### burstCount
 
 #### Methods
 
-External Methods:
-static create(options)
-enableEmitter()
-disableEmitter()
-destroyEmitter()
+#### External Methods:
+
+#### static create(options)
+
+#### enableEmitter()
+
+#### disableEmitter()
+
+#### destroyEmitter()
 
 ### Particle Class
 
 #### Attributes
 
-emitterID
-emitterLabel
-particleID
-size
-texture
-gravity
-angleVelocity
-angle
-velocity
-lifespan
-animate
-animationObject
-clipString
-blendStrength
-zindex
-isLiving
-position
-parentElement
-zindex
-loop
+#### emitterID
+
+#### emitterLabel
+
+#### particleID
+
+#### size
+
+#### texture
+
+#### gravity
+
+#### angleVelocity
+
+#### angle
+
+#### velocity
+
+#### lifespan
+
+#### animate
+
+#### animationObject
+
+#### clipString
+
+#### blendStrength
+
+#### zindex
+
+#### isLiving
+
+#### position
+
+#### parentElement
+
+#### zindex
+
+#### loop
 
 #### Methods
 
-External Methods:
-static create(options)
-removeParticle()
-enableParticle()
-disableParticle()
+#### External Methods:
+
+#### static create(options)
+
+#### removeParticle()
+
+#### enableParticle()
+
+#### disableParticle()
 
 ## Example Options Configurations
 
