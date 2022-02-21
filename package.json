@@ -1,6 +1,6 @@
 {
     "name": "dom-particle-system",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "description": "A 20kb lightweight, fast & powerful JavaScript particle library. It allows for individual particle control, and complete emitter systems.  Can pass descrete values, arrays of values, or pass functions that control specific parameters",
     "main": "ParticleSystem.js",
     "scripts": {

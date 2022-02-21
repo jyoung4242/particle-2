@@ -617,7 +617,7 @@ export class ParticleEmitter {
     }
 }
 
-class ParticleSystem {
+export class ParticleSystem {
     constructor(psOptions) {
         //load defaults
         if (!psOptions.parentElement) return null; //gaurd condition for one required param
