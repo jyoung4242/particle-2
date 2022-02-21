@@ -27,9 +27,7 @@ specific parameters
 
 ## Requirements
 
-Currently there are two .js module dependencies, which may change in future
-Vector.js and Spritesheet.js, which are just formatted out for convenience
-Both are included in the modules folder
+There are no more external dependencies, all have been removed.
 
 ## Variable Parameters
 
