@@ -4,6 +4,7 @@
 
 -   [Demo](https://mydomparticlesystem.netlify.app/)
 -   [Description](#description)
+-   [Usage](#usage)
 -   [Requirements](#requirements)
 -   [Variable Parameters](#variable-parameters)
 -   [Transforms](#transforms)
@@ -24,6 +25,12 @@ A 20kb lightweight, fast & powerful JavaScript particle library.
 It allows for individual particle control, and complete emitter systems.
 Can pass descrete values, arrays of values, or pass functions that control
 specific parameters
+
+## Usage
+
+```js
+npm i dom-particle-system
+```
 
 ## Requirements
 
