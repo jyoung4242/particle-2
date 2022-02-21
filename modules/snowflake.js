@@ -1,4 +1,4 @@
-import { Vector } from './vector.js';
+import { Vector } from './ParticleSystem.js';
 
 let snowParticleOptions = {
     texture: ['../assets/snowflake1.png', '../assets/snowflake2.png', '../assets/snowflake3.png'], //object for spritesheets, string for static image, or array of strings of images

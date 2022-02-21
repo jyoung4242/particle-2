@@ -20,8 +20,8 @@
 
 ## Description
 
-17KB lightweight, fast & powerful JavaScript particle library
-Allows for individual particle control, and complete emitter systems.
+A 20kb lightweight, fast & powerful JavaScript particle library.
+It allows for individual particle control, and complete emitter systems.
 Can pass descrete values, arrays of values, or pass functions that control
 specific parameters
 
