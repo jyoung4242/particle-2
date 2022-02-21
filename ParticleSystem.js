@@ -22,7 +22,7 @@ function degrees_to_radians(degrees) {
     return degrees * (pi / 180);
 }
 
-export class Particle {
+class Particle {
     constructor(pOptions) {
         //required params
         if (!pOptions.parentElement) return null;
@@ -340,7 +340,7 @@ export class Particle {
     }
 }
 
-export class ParticleEmitter {
+class ParticleEmitter {
     constructor(eOptions) {
         this.initialize_constructor(eOptions);
         this.create_DOM_structure();
@@ -617,7 +617,7 @@ export class ParticleEmitter {
     }
 }
 
-export class ParticleSystem {
+class ParticleSystem {
     constructor(psOptions) {
         //load defaults
         if (!psOptions.parentElement) return null; //gaurd condition for one required param
@@ -707,7 +707,7 @@ function lerpColor(a, b, amount) {
     return '#' + (((1 << 24) + (rr << 16) + (rg << 8) + rb) | 0).toString(16).slice(1);
 }
 
-export class Spritesheet {
+class Spritesheet {
     //private attributes
 
     constructor(numrows = 1, numcols = 1, frameWidth = null, frameHeight = null, divSize) {
@@ -743,7 +743,7 @@ export class Spritesheet {
     }
 }
 
-export class Sequence {
+class Sequence {
     constructor(frameString, isLooping = false, frameRate = 60, direction = 'normal') {
         this.frameString = frameString;
         this.isLooping = isLooping;
@@ -818,7 +818,7 @@ export class Sequence {
     }
 }
 
-export class Vector {
+class Vector {
     x;
     y;
     z;
@@ -937,7 +937,7 @@ export class Vector {
     }
 }
 
-export class Vector3 extends Vector {}
+class Vector3 extends Vector {}
 
 module.exports = {
     Particle,
