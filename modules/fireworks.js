@@ -1,5 +1,5 @@
 import { divParticle } from '../script.js';
-import { Vector } from './vector.js';
+import { Vector } from './ParticleSystem.js';
 
 let myE;
 
