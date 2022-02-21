@@ -939,7 +939,7 @@ class Vector {
 
 class Vector3 extends Vector {}
 
-module.export = {
+module.exports = {
     Particle,
     ParticleEmitter,
     ParticleSystem,
