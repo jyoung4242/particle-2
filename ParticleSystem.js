@@ -938,3 +938,12 @@ export class Vector {
 }
 
 export class Vector3 extends Vector {}
+
+module.exports = {
+    Particle,
+    ParticleEmitter,
+    ParticleSystem,
+    Vector,
+    Spritesheet,
+    Sequence,
+};
