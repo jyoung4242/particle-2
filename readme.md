@@ -2,7 +2,8 @@
 
 ## Contents
 
--   [Demo](https://mydomparticlesystem.netlify.app/)
+-   [Demo](http://mydomparticlesystem.netlify.app/)
+-   [Demo Project on GitHub](http://github.com/jyoung4242/myParticleTest)
 -   [Description](#description)
 -   [Usage](#usage)
 -   [Requirements](#requirements)
