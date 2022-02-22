@@ -76,24 +76,30 @@ class Particle {
         this.lifespan = this.set_param(options.lifespan);
         if (this.lifespan == null) return null;
 
-        this.duration = 0;
+        this.zindex = this.set_param(options.zindex);
+        if (this.zindex == null) return null;
 
+        this.duration = 0;
         this.animate = options.animation;
         if (this.animate) {
             this.animationObject = options.animationObject;
             this.animationSequence = options.animationObject.sequence;
         }
 
-        //order is important as sequential updates may be dependant
         this.activeVtransform = false;
         this.activeAtransform = false;
+        this.activeStransform = false;
+        this.scale = new Vector(1, 1);
+
+        //order is important as sequential updates may be dependant
         this.trueAngle = this.update_angle();
         this.trueVelocity = this.update_velocity();
         this.trueLivespan = this.update_lifespan();
+        this.trueZindex = this.update_zindex();
 
         this.clipString = options.clipString;
         this.blendStrength = options.blendStrength;
-        this.zindex = options.zindex;
+
         this.isLiving = options.isLiving ? options.isLiving : false;
         this.loop = options.loop;
 
@@ -132,7 +138,7 @@ class Particle {
         particleElement.setAttribute('height', `${this.size.y}`);
         particleElement.style.width = `${this.size.x}px`;
         particleElement.style.height = `${this.size.y}px`;
-        particleElement.style.zIndex = this.zindex;
+        particleElement.style.zIndex = this.trueZindex;
         particleElement.style.position = 'absolute';
         particleElement.style.left = `${this.position.x}px`;
         particleElement.style.top = `${this.position.y}px`;
@@ -164,12 +170,27 @@ class Particle {
         particleElement.appendChild(innerdiv);
     }
 
+    update_angle() {
+        if (!this.activeAtransform) {
+            let type = typeof this.angleVelocity;
+            switch (type) {
+                case 'function':
+                    this.trueAngle = this.angle + this.angleVelocity(this.position, this.duration, this.trueLivespan, this.size);
+                    break;
+                default:
+                    this.trueAngle = this.angle + this.angleVelocity;
+                    break;
+            }
+        }
+        return this.trueAngle;
+    }
+
     update_velocity() {
         if (!this.activeVtransform) {
             let type = typeof this.velocity;
             switch (type) {
                 case 'function':
-                    this.trueVelocity = this.velocity(this.trueAngle, this.position, this.duration, this.size);
+                    this.trueVelocity = this.velocity(this.trueAngle, this.position, this.duration, this.trueLivespan, this.size);
                     break;
                 default:
                     if (this.gravity) this.trueVelocity += this.velocity + this.gravity;
@@ -180,19 +201,17 @@ class Particle {
         return this.trueVelocity;
     }
 
-    update_angle() {
-        if (!this.activeAtransform) {
-            let type = typeof this.angleVelocity;
-            switch (type) {
-                case 'function':
-                    this.trueAngle = this.angle + this.angleVelocity(this.trueVelocity, this.position, this.duration, this.size);
-                    break;
-                default:
-                    this.trueAngle = this.angle + this.angleVelocity;
-                    break;
+    update_zindex() {
+        let type = typeof this.zindex;
+
+        if (type == 'function') {
+            this.trueZindex = this.zindex(this.trueVelocity, this.trueAngle, this.position, this.duration, this.trueLivespan, this.size);
+            if (this.domhandle) {
+                this.domhandle.style.zIndex = this.trueZindex;
             }
         }
-        return this.trueAngle;
+
+        return this.trueZindex;
     }
 
     update_position() {
@@ -211,57 +230,53 @@ class Particle {
 
     applyTransform(transform) {
         //times be a percent decimal, like .5 is 50% of lifespan
-        const param = transform[0];
-        const values = transform[1];
-        const startTime = values.time.start;
-        const endTime = values.time.end;
+        const param = transform[1].type;
+        const values = transform[1].values;
+        const startTime = transform[1].time.start;
+        const endTime = transform[1].time.end;
         const currentTime = this.duration / this.lifespan;
 
         //active transform
         if (currentTime > startTime && currentTime < endTime) {
             const alpha = range(startTime, endTime, 0, 1, currentTime); //normalize to a lerp percentage
-
+            // console.log('transform: ', transform);
             switch (param) {
                 case 'velocity':
-                    //check time, is active
-
                     let x1, y1, x2, y2;
-                    x1 = values.values.start.x == null ? this.velocity.x : values.values.start.x;
-                    y1 = values.values.start.y == null ? this.velocity.y : values.values.start.y;
-                    x2 = values.values.end.x == null ? this.velocity.x : values.values.end.x;
-                    y2 = values.values.end.y == null ? this.velocity.y : values.values.end.y;
+                    //checking for null values so current values are used in place
+                    x1 = values.start.x == null ? this.trueVelocity.x : values.start.x;
+                    y1 = values.start.y == null ? this.trueVelocity.y : values.start.y;
+                    x2 = values.end.x == null ? this.trueVelocity.x : values.end.x;
+                    y2 = values.end.y == null ? this.trueVelocity.y : values.end.y;
                     this.trueVelocity = Vlerp({ x: x1, y: y1 }, { x: x2, y: y2 }, alpha);
                     return 'V';
 
                 case 'opacity':
-                    const appliedOpacity = lerp(values.values.start, values.values.end, alpha);
+                    const appliedOpacity = lerp(values.start, values.end, alpha);
                     this.domhandle.style.opacity = `${appliedOpacity}`;
                     break;
+
                 case 'color':
                     const innerDiv = this.domhandle.firstChild;
                     let s1, s2;
-                    if (typeof values.values.start == 'function') s1 = values.values.start();
-                    else s1 = values.values.start;
-                    if (typeof values.values.end == 'function') s2 = values.values.end();
-                    else s2 = values.values.end;
+                    if (typeof values.start == 'function') s1 = values.start();
+                    else s1 = values.start;
+                    if (typeof values.end == 'function') s2 = values.end();
+                    else s2 = values.end;
 
                     const appliedColor = lerpColor(s1, s2, alpha);
-
                     this.domhandle.style.backgroundColor = appliedColor;
                     innerDiv.style.opacity = `${this.blendStrength}%`;
-
                     break;
+
                 case 'angle':
                     innerDiv = this.domhandle.firstChild;
-                    const appliedAngle = lerp(values.values.start, values.values.end, alpha);
-                    innerDiv.style.transform = `rotate(${appliedAngle}deg)`;
-
+                    this.angle = lerp(values.start, values.end, alpha);
                     return 'A';
 
                 case 'size':
-                    const newSize = new Vector(Vlerp(values.values.start, values.values.end, alpha));
-                    this.domhandle.style.transform = `scale(${newSize.x},${newSize.y})`;
-                    break;
+                    this.scale = new Vector(Vlerp(values.start, values.end, alpha));
+                    return 'S';
             }
             return null;
         }
@@ -289,6 +304,9 @@ class Particle {
     update(time) {
         this.duration += time;
 
+        //******************************************************************** */
+        //Lifespan check
+        //******************************************************************** */
         if (this.duration >= this.trueLivespan) {
             if (this.loop) {
                 return 2;
@@ -298,22 +316,30 @@ class Particle {
             }
         }
 
-        //apply transforms
+        //******************************************************************** */
+        //Transforms are parsed
+        //******************************************************************** */
         if (Object.keys(this.transforms).length) {
             let cntVt = 0;
             let cntAt = 0;
+            let cntSt = 0;
             Object.entries(this.transforms).forEach(entry => {
                 let rtrn = this.applyTransform(entry);
                 if (rtrn == 'V') cntVt++;
                 if (rtrn == 'A') cntAt++;
+                if (rtrn == 'S') cntSt++;
             });
             if (cntVt > 0) this.activeVtransform = true;
             else this.activeVtransform = false;
             if (cntAt > 0) this.activeAtransform = true;
             else this.activeAtransform = false;
+            if (cntSt > 0) this.activeStransform = true;
+            else this.activeStransform = false;
         }
 
-        //add animation update here
+        //******************************************************************** */
+        //This is where background position gets updated to animate spritesheet
+        //******************************************************************** */
         if (this.animate) {
             let i = this.animationSequence.getCurrentFrameIndex();
             this.animationSequence.updateElapsedTime(time);
@@ -328,10 +354,22 @@ class Particle {
             }
         }
 
+        //******************************************************************** */
+        //This is where true particle update happens
+        //******************************************************************** */
         if (this.isLiving) {
+            //update particle location based on velocity
             this.position = this.update_position();
-            this.angle = this.update_angle();
-            this.domhandle.style.transform = `rotate(${this.angle}deg)`;
+            this.domhandle.style.zIndex = this.update_zindex();
+
+            //build transform statement
+            let transformString;
+            if (!this.activeAtransform) this.angle = this.update_angle();
+            transformString = `rotate(${this.angle}deg)`;
+            if (this.activeStransform) transformString = transformString + ` scale(${this.scale.x},${this.scale.y})`;
+            this.domhandle.style.transform = transformString;
+
+            //update position on DOM
             this.domhandle.style.left = `${this.position.x}px`;
             this.domhandle.style.top = `${this.position.y}px`;
         }
@@ -353,29 +391,42 @@ class ParticleEmitter {
             this.flip = opt.texture.flip;
         }
 
+        //emitter general purpose values
         this.emitterID = opt.emitterID;
         this.emitterLabel = opt.emitterLabel;
-        this.particles = [];
-        this.deadpool = [];
-        this.lifespan = opt.lifespan;
-        this.isEnabled = opt.enable;
         this.shape = opt.shape;
         this.size = opt.size;
         this.position = opt.position;
-        this.emitRate = opt.emitRate;
-        this.particleOnCreate = opt.particleOnCreate;
-        this.particleOnDestroy = opt.particleOnDestroy;
-        this.numParticles = opt.numParticles;
-        this.parentElement = opt.parentElement;
-        this.particleOptions = opt.particleOptions;
-        this.emissionTimer = 0;
         this.region = opt.region;
         this.zindex = opt.zindex;
-        this.loop = opt.loop;
-        this.loopCount = 0;
-        this.burstCount = opt.burstCount;
         this.redrawFlag = true;
         this.emittingPoint = opt.emittingPoint;
+
+        //passed functions
+        this.particleOnCreate = opt.particleOnCreate;
+        this.particleOnDestroy = opt.particleOnDestroy;
+        this.parentElement = opt.parentElement;
+        this.particleOptions = opt.particleOptions;
+
+        //Emitter Lifecycle values
+        this.lifespan = opt.lifespan;
+        this.isEnabled = opt.enable;
+        this.emitterLifecycleTimer = 0;
+
+        //Emission Behavior values
+        this.numParticles = opt.numParticles;
+        this.loopCount = 0;
+        this.isBursting = false;
+        this.burstCount = opt.burstCount;
+        this.burstGapTimer = 0;
+        this.burstGap = opt.burstGap;
+        this.emissionGapTimer = 0;
+        this.loop = opt.loop;
+        this.emitRate = opt.emitRate;
+
+        //Setup particle arrays
+        this.particles = [];
+        this.deadpool = [];
     }
 
     create_DOM_structure() {
@@ -573,37 +624,95 @@ class ParticleEmitter {
             this.domwidth = this.domhandle.clientWidth;
             this.domheight = this.domhandle.clientHeight;
         } else {
-            this.emissionTimer += time;
+            //******************************************************************** */
+            //update Timers
+            //need a lifespan timer for the emitter
+            //need a burst gap timer
+            //need a emission gap timer
+            //******************************************************************** */
 
-            if (this.emissionTimer >= this.lifespan && this.lifespan != undefined && this.loop == false) {
+            //gaurd condition for disabled emitters
+            if (!this.isEnabled) return 1;
+            //if not looping, update lifecycle timer
+            if (!this.loop) this.emitterLifecycleTimer += time;
+
+            //******************************************************************** */
+            // Check Emitter Lifespan
+            //******************************************************************** */
+
+            if (this.emitterLifecycleTimer >= this.lifespan && this.lifespan != undefined && this.loop == false) {
                 this.destroyEmitter();
                 return -1;
             }
 
-            if (this.isEnabled) {
-                if (this.loop || (!this.loop && this.loopCount < 1)) {
-                    if (this.emissionTimer >= this.emitRate / 1000 && this.particles.length < this.numParticles) {
-                        this.emissionTimer = 0;
+            //******************************************************************** */
+            // Check emission status
+            //******************************************************************** */
 
-                        //add burst option here, loop through burst and add # number of particles in this instance
-                        if (this.burstCount > 1) {
-                            for (let burst = this.burstCount; burst >= 0; burst--) {
+            this.isBursting = this.burstGapTimer >= this.burstGap ? true : false;
+
+            if (this.isBursting) {
+                if (this.emissionGapTimer >= this.emitRate) {
+                    //emit particle if cap not reached
+
+                    if (this.burstGap == -1) {
+                        for (let i = 0; i < this.burstCount; i++) {
+                            if (this.particles.length < this.numParticles) {
                                 this.particleOptions.position = this.getNextStartingPoint();
                                 this.particleOptions.emitterID = this.emitterID;
                                 this.addParticle(this.particleOptions);
                             }
-                            this.loopCount += 1;
-                        } else {
+                            this.loopCount++;
+                        }
+                    } else {
+                        if (this.particles.length < this.numParticles) {
                             this.particleOptions.position = this.getNextStartingPoint();
                             this.particleOptions.emitterID = this.emitterID;
                             this.addParticle(this.particleOptions);
-                            this.loopCount += 1;
                         }
                     }
-                }
-            }
 
-            //update all active particles
+                    //reset emission timer
+                    this.emissionGapTimer = 0;
+                    this.loopCount++; //increment loopcount
+                } else {
+                    this.emissionGapTimer += time;
+                }
+
+                //number of particles in burst meet, reset burst
+                if (this.loopCount >= this.burstCount) {
+                    this.isBursting = false;
+                    this.loopCount = 0;
+                    this.emissionGapTimer = 0;
+                    this.burstGapTimer = 0;
+                }
+            } else this.burstGapTimer += time;
+
+            /* if (this.loop || (!this.loop && this.loopCount < 1)) {
+                if (this.emissionTimer >= this.emitRate / 1000 && this.particles.length < this.numParticles) {
+                    this.emissionTimer = 0;
+
+                    //add burst option here, loop through burst and add # number of particles in this instance
+                    if (this.burstCount > 1) {
+                        for (let burst = this.burstCount; burst >= 0; burst--) {
+                            this.particleOptions.position = this.getNextStartingPoint();
+                            this.particleOptions.emitterID = this.emitterID;
+                            this.addParticle(this.particleOptions);
+                        }
+                        this.loopCount += 1;
+                    } else {
+                        this.particleOptions.position = this.getNextStartingPoint();
+                        this.particleOptions.emitterID = this.emitterID;
+                        this.addParticle(this.particleOptions);
+                        this.loopCount += 1;
+                    }
+                }
+            } */
+
+            //******************************************************************** */
+            // Update Existing Particles
+            //******************************************************************** */
+
             if (this.isEnabled) {
                 this.particles.forEach(particle => {
                     let stillAlive = particle.update(time);

@@ -16,11 +16,24 @@ body {
     display: none;
 }
 
+#magic {
+    position: absolute;
+    width: 175px;
+    height: 175px;
+    background-image: url('../assets/magic.png');
+    background-size: 1152px 576px;
+    background-position: -963px -194px;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
 #fire {
     position: absolute;
     width: 175px;
     height: 175px;
-    background-image: url('./assets/campfire.png');
+    background-image: url('../assets/campfire.png');
+
     background-size: cover;
     top: 70%;
     left: 50%;

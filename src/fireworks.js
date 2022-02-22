@@ -1,18 +1,30 @@
-import { divParticle } from '../script.js';
-import { Vector } from './ParticleSystem.js';
+import { divParticle } from './script.js';
+import { Vector } from '../ParticleSystem.js';
 
 let myE;
 
+//********************************* */
+//angle params (p,d,l,s)
+//velocity params (a,p,d,l,s)
+//zindex params (v,a,p,d,l,s)
+//********************************* */
 let fireworksParticleOptions = {
+    //userdefined param
     dirction: 0,
-    texture: '', //object for spritesheets, string for static image, or array of strings of images
-    animation: false,
+
+    //general purpose params
+    parentElement: 'divworld',
+    emitterLabel: 'fireworks',
     isLiving: true,
     loop: false,
-    size: { x: 5, y: 5 }, //function, vector, array of vectors
+    size: [{ x: 5, y: 5 }],
+    lifespan: 3.75,
+
+    //positional and behavioral params
+    position: new Vector(),
     angle: 0,
-    angleVelocity: 0, //array, number, function
-    velocity: function (a, p, d, s) {
+    angleVelocity: 0,
+    velocity: function (a, p, d, l, s) {
         let x, y;
 
         if (this.direction == 1) x = 1;
@@ -22,34 +34,47 @@ let fireworksParticleOptions = {
         y = -6 + frameStep * 0.01;
 
         return { x: x, y: y };
-    }, //function, vector, array of vectors
-    position: new Vector(), //function, vector, array of vectors
-    clipString: 'circle(60%)',
-    blendStrength: 10, //opacity of innerdiv
-    lifespan: 3, //int, array, function
-    parentElement: 'divworld',
-    emitterLabel: 'fireworks',
-    emitterID: '',
-    particleID: '',
+    },
     zindex: 2,
-    gravity: 0.01, //int, array, function
+    gravity: 0.04,
+
+    //animation and texture params
+    texture: '',
+    animation: false,
+    animationObject: {},
+    clipString: 'circle(60%)',
+    blendStrength: 30,
+
+    //transforms
     transforms: {
-        color: { time: { start: 0, end: 1 }, values: { start: '#C63347', end: '#f5e028' } },
-    }, // "param": {time: {start: 0 end: 0}},{values: {start: 0, end: 0}};
+        0: { type: 'color', time: { start: 0, end: 1 }, values: { start: '#C63347', end: '#f5e028' } },
+    },
 };
 
+//********************************* */
+//angle params (p,d,l,s)
+//velocity params (a,p,d,l,s)
+//zindex params (v,a,p,d,l,s)
+//********************************* */
 let burstParticleOptions = {
+    //userdefined param
     startingAngle: 0,
     startcolor: '',
     stopcolor: '',
-    texture: '', //object for spritesheets, string for static image, or array of strings of images
-    animation: false,
+
+    //general purpose params
+    parentElement: 'divworld',
+    emitterLabel: 'burst',
     isLiving: true,
     loop: false,
-    size: { x: 5, y: 5 }, //function, vector, array of vectors
+    size: [{ x: 5, y: 5 }],
+    lifespan: 0.75,
+
+    //positional and behavioral params
+    position: new Vector(),
     angle: 0,
-    angleVelocity: 0, //array, number, function
-    velocity: function (a, p, d, s) {
+    angleVelocity: 0,
+    velocity: function (a, p, d, l, s) {
         let magnitude = 6;
         let x, y;
         if (this.startingAngle) {
@@ -62,19 +87,21 @@ let burstParticleOptions = {
         } else return { x: 0, y: 0 };
 
         return { x: x, y: y };
-    }, //function, vector, array of vectors
-    position: new Vector(), //function, vector, array of vectors
-    clipString: 'circle(60%)',
-    blendStrength: 5, //opacity of innerdiv
-    lifespan: 0.75, //int, array, function
-    parentElement: 'divworld',
-    emitterLabel: 'burst',
-    emitterID: '',
-    particleID: '',
+    },
     zindex: 2,
-    gravity: 0, //int, array, function
+    gravity: 0,
+
+    //animation and texture params
+    texture: '',
+    animation: false,
+    animationObject: {},
+    clipString: 'circle(60%)',
+    blendStrength: 10,
+
+    //transforms
     transforms: {
-        color: {
+        0: {
+            type: 'color',
             time: { start: 0, end: 1 },
             values: {
                 start: function () {
@@ -88,53 +115,64 @@ let burstParticleOptions = {
                 },
             },
         },
-        opacity: { time: { start: 0.5, end: 1 }, values: { start: 1, end: 0 } },
-    }, // "param": {time: {start: 0 end: 0}},{values: {start: 0, end: 0}};
+        1: { type: 'opacity', time: { start: 0.5, end: 1 }, values: { start: 1, end: 0 } },
+    },
 };
 
 export let burstEmitterOptions = {
-    parentElement: 'divworld',
+    //general purpos params
     emitterLabel: 'burst',
-    emitterID: '',
-    numParticles: 100,
-    burstCount: 100,
-    emittingLocation: new Vector(0, 0),
-    loop: false,
-    lifespan: 6,
-    enable: false,
+    parentElement: 'divworld',
     shape: 'circle', // circle, rectangle
-    region: 'edge', //area|edge
-    size: { x: 10, y: 10 },
+    region: 'area', //area|edge
+    size: { x: 25, y: 25 },
     position: new Vector(0, 0),
-    emitRate: 1,
+    emittingPoint: new Vector(0, 0),
+    texture: {},
+    zindex: 1,
+    lifespan: 0.75,
+
+    //emission params
+    numParticles: 50,
+    loop: false,
+    enable: false,
+    emitRate: 0,
+    burstGap: -1,
+    burstCount: 50,
+
+    //passed functions
     particleOnCreate: part => {
         //based on position, set initial angle and velocity
         const cp = new Vector(myE.position.x + myE.size.x / 2, myE.position.y + myE.size.y / 2);
         let tempV = part.position.subtract(cp);
-        let rads = Math.atan2(tempV.y, tempV.x);
         part.startingAngle = Math.atan2(tempV.y, tempV.x);
     },
     particleOnDestroy() {},
-    initialVelocityTransform() {},
     particleOptions: burstParticleOptions,
-    texture: {},
-    zindex: 1,
 };
 
 export let fireworksEmitterOptions = {
-    parentElement: 'divworld',
+    //general purpos params
     emitterLabel: 'fireworks',
-    emitterID: '',
-    numParticles: 4,
-    burstCount: 1,
-    emittingLocation: {},
-    loop: true,
-    enable: false,
+    parentElement: 'divworld',
     shape: 'rectangle', // circle, rectangle
     region: 'area', //area|edge
     size: { x: '100%', y: 5 },
     position: new Vector(0, 695),
-    emitRate: 2000,
+    emittingPoint: new Vector(0, 0),
+    texture: {},
+    zindex: 1,
+    lifespan: -1,
+
+    //emission params
+    numParticles: 4,
+    loop: true,
+    enable: false,
+    emitRate: 2,
+    burstGap: 0,
+    burstCount: 1,
+
+    //passed functions
     particleOnCreate: part => {
         if (Math.random() * 5 > 2.5) {
             part.direction = 1;
@@ -147,8 +185,5 @@ export let fireworksEmitterOptions = {
         myE = divParticle.addEmitter(burstEmitterOptions);
         myE.enableEmitter();
     },
-    initialVelocityTransform() {},
     particleOptions: fireworksParticleOptions,
-    texture: {},
-    zindex: 1,
 };
