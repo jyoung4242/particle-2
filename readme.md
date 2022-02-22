@@ -42,7 +42,7 @@ There are no more external dependencies, all have been removed.
 There are several different parameters that can be passed either a discrete value, like a number, number, or string, or the can be passed and array of like values, or they can be passed a function
 
 Particle Parameters that are subject to this:
-size, texture, gravity, angleVelocity, velocity, lifespan
+size, texture, gravity, angleVelocity, velocity, lifespan, zindex (just added!)
 
 if you pass an array of appropriate values, on the creation of the particle, it will randomly select on element of an array... this works well for textures if you want multiple image files used for particles.
 
@@ -103,17 +103,17 @@ The transform object calls out different parameters that can be modified over th
 it follows this patter:
 
 ```js
-"param": {time: {start: 0 end: 0}},{values: {start: 0, end: 0}};
+# : type: 'param',{time: {start: 0 end: 0}},{values: {start: 0, end: 0}};
 ```
 
 Parameters that can be interpolated over time:
 Velocity, Size, Angle, Color
 
 ```js
-opacity: { time: { start: 0.7, end: 1 }, values: { start: 0.8, end: 0 } },
-size: { time: { start: 0.5, end: 1 }, values: { start: 1, end: 0.2 } },
-color: { time: { start: 0, end: 1 }, values: { start: '#C63347', end: '#f5e028' } },
-velocity: { time: { start: 0, end: 1 }, values: { start: Vector(1, 2), end: {x: 0, y:0} } },
+0: {type: 'opacity', time: { start: 0.7, end: 1 }, values: { start: 0.8, end: 0 } },
+1: {type: 'size', time: { start: 0.5, end: 1 }, values: { start: Vector(1, 1), end: Vector(.2, .2)  } },
+2: {type: 'color', time: { start: 0, end: 1 }, values: { start: '#C63347', end: '#f5e028' } },
+3: {type: 'velocity', time: { start: 0, end: 1 }, values: { start: Vector(1, 2), end: {x: 0, y:0} } },
 ```
 
 the transform will interpolate between the start and end values, based on the start and end time provide
