@@ -73,7 +73,7 @@ function init() {
     campfire = document.getElementById('fire');
     magi = document.getElementById('magic');
     selectcontrol.addEventListener('change', changeParticles);
-    selectcontrol.value = 'magic';
+    selectcontrol.value = 'bonfire';
 
     divParticle = ParticleSystem.create(particleSystemOptions);
     engine.engineStart();

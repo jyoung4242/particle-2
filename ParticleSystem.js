@@ -239,7 +239,7 @@ class Particle {
         //active transform
         if (currentTime > startTime && currentTime < endTime) {
             const alpha = range(startTime, endTime, 0, 1, currentTime); //normalize to a lerp percentage
-            // console.log('transform: ', transform);
+
             switch (param) {
                 case 'velocity':
                     let x1, y1, x2, y2;
@@ -276,6 +276,7 @@ class Particle {
 
                 case 'size':
                     this.scale = new Vector(Vlerp(values.start, values.end, alpha));
+
                     return 'S';
             }
             return null;
@@ -367,6 +368,7 @@ class Particle {
             if (!this.activeAtransform) this.angle = this.update_angle();
             transformString = `rotate(${this.angle}deg)`;
             if (this.activeStransform) transformString = transformString + ` scale(${this.scale.x},${this.scale.y})`;
+
             this.domhandle.style.transform = transformString;
 
             //update position on DOM
@@ -533,6 +535,7 @@ class ParticleEmitter {
         if (this.loop && this.deadpool.length) {
             newPart = this.deadpool.pop();
             newPart.initialize_constructor(options);
+            newPart.enableParticle();
         } else {
             newPart = Particle.create(options);
             if (!newPart) return -1;
@@ -545,6 +548,7 @@ class ParticleEmitter {
     moveToDeadPool(particle) {
         let ind = this.particles.indexOf(particle);
         const deadParticle = this.particles.splice(particle, 1);
+        deadParticle[0].disableParticle();
         if (ind != -1) this.deadpool.push(deadParticle[0]);
     }
 
@@ -626,9 +630,6 @@ class ParticleEmitter {
         } else {
             //******************************************************************** */
             //update Timers
-            //need a lifespan timer for the emitter
-            //need a burst gap timer
-            //need a emission gap timer
             //******************************************************************** */
 
             //gaurd condition for disabled emitters

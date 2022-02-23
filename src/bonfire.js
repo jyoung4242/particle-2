@@ -52,8 +52,9 @@ let smokeParticleOptions = {
 
     //transforms
     transforms: {
-        0: { type: 'opacity', time: { start: 0, end: 1 }, values: { start: 0.9, end: 0 } },
-        1: { type: 'size', time: { start: 0.25, end: 1 }, values: { start: 1, end: 8 } },
+        0: { type: 'opacity', time: { start: 0.2, end: 1 }, values: { start: 1, end: 0 } },
+        1: { type: 'size', time: { start: 0.25, end: 1 }, values: { start: { x: 1, y: 1 }, end: { x: 4, y: 4 } } },
+        2: { type: 'opacity', time: { start: 0, end: 0.2 }, values: { start: 1, end: 1 } },
     },
 };
 
@@ -69,7 +70,7 @@ let fireParticleoptions = {
         { x: 20, y: 20 },
         { x: 10, y: 10 },
     ],
-    lifespan: [0.75, 1.0, 0.5],
+    lifespan: [0.75, 1.0, 0.5, 1.25, 1.5, 1.75],
 
     //positional and behavioral params
     position: new Vector(),
@@ -77,7 +78,7 @@ let fireParticleoptions = {
     angleVelocity: [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2],
     velocity: function (a, p, d, l, s) {
         let x;
-        x = Math.sin(degrees_to_radians(a) / 6);
+        x = 1.5 * Math.sin(degrees_to_radians(a * 2) / 6);
         return { x: x, y: -1 };
     },
     zindex: 2,
@@ -92,8 +93,8 @@ let fireParticleoptions = {
 
     //transforms
     transforms: {
-        0: { type: 'size', time: { start: 0.8, end: 1 }, values: { start: 1, end: 0.2 } },
-        1: { type: 'size', time: { start: 0, end: 0.8 }, values: { start: 1.1, end: 1 } },
+        0: { type: 'size', time: { start: 0.8, end: 1 }, values: { start: { x: 1, y: 1 }, end: { x: 0.2, y: 0.2 } } },
+        1: { type: 'size', time: { start: 0, end: 0.8 }, values: { start: { x: 1.1, y: 1.1 }, end: { x: 1.1, y: 1.1 } } },
     },
 };
 
@@ -138,7 +139,7 @@ export let fireEmitter = {
     lifespan: -1,
 
     //emission params
-    numParticles: 30,
+    numParticles: 50,
     loop: true,
     enable: false,
     emitRate: 0.02,
