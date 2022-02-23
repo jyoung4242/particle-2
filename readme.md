@@ -57,7 +57,7 @@ So this lets a pool of different assets being used for the snow particles
 if you pass a function, example:
 
 ```js
- velocity: function (a, p, d, s) {
+ velocity: function (a, p, d,l, s) {
         let magnitude = 6;
         let x, y;
         if (this.startingAngle) {
@@ -73,12 +73,12 @@ if you pass a function, example:
     }, //function, vector, array of vectors
 ```
 
-depending on the parameter, it will either run this function every update, or just on initializationS
+depending on the parameter, it will either run this function every update, or just on initialization
 
 size: runs once on creation
 
 velocity: updates each loop, returns new velocity vector each time
-requires parameters passed (a,p,d,s) so your function has access to
+requires parameters passed (a,p,d,l,s) so your function has access to
 angle, position, duration, and size parameters to use in your function
 returns vector object {x:0, y:0}
 
@@ -87,7 +87,7 @@ texture: \*\*\*\* not recommended to use function - untested
 gravity:runs once on creation
 
 angleVelocity: updates each loop, returns new angle value each time
-requires parameters passed (v,p,d,s) so your function has access to
+requires parameters passed (v,p,d,l,s) so your function has access to
 velocity, position, duration, and size parameters to use in your function
 must return number
 
@@ -95,6 +95,10 @@ lifespan: updates each loop, returns new angle value each time
 requires parameters passed (v,a,s,d) so your function has access to
 velocity, angle, size, and position parameters to use in your function
 must return number
+
+zindex: updates each loop, returns a number representing new zindex level
+requires passed values, (v,a,p,d,l,s), so you have access to velocity, angle,
+size, lifespan, and duration
 
 ## Transforms
 
@@ -107,7 +111,7 @@ it follows this patter:
 ```
 
 Parameters that can be interpolated over time:
-Velocity, Size, Angle, Color
+Velocity, Size, Angle, Color, and Opacity
 
 ```js
 0: {type: 'opacity', time: { start: 0.7, end: 1 }, values: { start: 0.8, end: 0 } },
@@ -232,24 +236,21 @@ the parameter for the update method is the elapsed duration from the previous ca
 String - Label designation that makes emitters elements in the DOM easier to track
 examples( "fire", "snowfall", "burst")
 
-#### texture
+#### parentElement
 
-String - Path to image file used as a texture for the emitter.
+String - The parentElement Attribute passed as a member of the options object during addEmitter method of a particle system. Is a string identifier for the id of the div element assigned to the particle system.
 
-#### lifespan
-
-number value that designates how many seconds the emitter will last prior to being destroyed.
-If left undefined, emitter will not expirte
-
-#### isEnabled
-
-Boolan flag that can be enable/disabled via methods, if disabled, emitter update routine will be skipped for that emitter
+All emitters and particles become children of the domParent
 
 #### shape
 
 string value of ("circle","rectangle","point")
 
 This determines the region shape of the emitter, which can be circular, a distinct point, or a rectangle
+
+#### region
+
+String - if you are using a circle or rectangle shape for your emitter, the region string will either need to be "area" or "edge" and this will determine if your emitter will use the entire area of the emitter, or just emit particles on the edge of the shape
 
 #### size
 
@@ -264,9 +265,49 @@ a Vector(x: 0, y:0) object that determines the overall location (x)(y) of the DO
 a Vector(x: 0, y:0) object that determines the overall location (x)(y) of the point of emission in the emitter region, if "point" is selected as shape
 this is an offset to the x,y location of the emitter
 
-#### emitRate
+#### texture
 
-number - in milliseconds that defines the emission rate for particles on an enabled emitter...
+String - Path to image file used as a texture for the emitter.
+
+#### zindex
+
+number - CSS z index so you can control what layer your dom elements are on
+
+#### lifespan
+
+number value that designates how many seconds the emitter will last prior to being destroyed.
+If left undefined, emitter will not expirte
+
+#### isEnabled
+
+Boolan flag that can be enable/disabled via methods, if disabled, emitter update routine will be skipped for that emitter
+
+### burst values (controls how the emitter emits)
+
+#### loop
+
+Boolean value, if loop is true, the emitter will continue producting particles , if false, it will be a one-shot type behavior, and the emitter will run until the number of particles specified in the object has been reached
+
+#### burstCount
+
+number - controls how many particles are fired during an emission
+
+#### numParticles
+
+number - value that caps the amount of particles that can be emitted by this emitter
+
+#### burstGap - SECONDS
+
+number - in seconds that defines the gap of time between emission bursts...
+
+#### burstcount
+
+number - in seconds that defines the emission rate for particles on an enabled emitter...
+
+#### emitRate - SECONDS
+
+number - in seconds that defines the emission rate for particles on an enabled emitter...
+if set to -1, all particles in burstcount will fire at once
 
 #### particleOnCreate ()
 
@@ -276,35 +317,9 @@ null or function - by default null, but you can pass a function to this options 
 
 null or function - by default null,but you can pass a function to this options object. This function will run immediately before a particle is destroyed.
 
-#### numParticles
-
-number - value that caps the amount of particles that can be emitted by this emitter
-
-#### parentElement
-
-String - The parentElement Attribute passed as a member of the options object during addEmitter method of a particle system. Is a string identifier for the id of the div element assigned to the particle system.
-
-All emitters and particles become children of the domParent
-
 #### particleOptions
 
 Object - You must pass the particleOptions object that defines all the parameters of the particles to the emitter, and this is used during the particle creation methods for the emitter
-
-#### region
-
-String - if you are using a circle or rectangle shape for your emitter, the region string will either need to be "area" or "edge" and this will determine if your emitter will use the entire area of the emitter, or just emit particles on the edge of the shape
-
-#### zindex
-
-number - CSS z index so you can control what layer your dom elements are on
-
-#### loop
-
-Boolean value, if loop is true, the emitter will continue producting particles , if false, it will be a one-shot type behavior, and the emitter will run until the number of particles specified in the object has been reached
-
-#### burstCount
-
-number - controls how many particles are fired during an emission
 
 #### Methods
 

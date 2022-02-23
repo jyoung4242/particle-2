@@ -52,7 +52,7 @@ let smokeParticleOptions = {
 
     //transforms
     transforms: {
-        0: { type: 'opacity', time: { start: 0.1, end: 1 }, values: { start: 0.5, end: 0 } },
+        0: { type: 'opacity', time: { start: 0, end: 1 }, values: { start: 0.9, end: 0 } },
         1: { type: 'size', time: { start: 0.25, end: 1 }, values: { start: 1, end: 8 } },
     },
 };
@@ -69,7 +69,7 @@ let fireParticleoptions = {
         { x: 20, y: 20 },
         { x: 10, y: 10 },
     ],
-    lifespan: [1, 1.25, 1.5],
+    lifespan: [0.75, 1.0, 0.5],
 
     //positional and behavioral params
     position: new Vector(),
@@ -93,6 +93,7 @@ let fireParticleoptions = {
     //transforms
     transforms: {
         0: { type: 'size', time: { start: 0.8, end: 1 }, values: { start: 1, end: 0.2 } },
+        1: { type: 'size', time: { start: 0, end: 0.8 }, values: { start: 1.1, end: 1 } },
     },
 };
 
@@ -137,7 +138,7 @@ export let fireEmitter = {
     lifespan: -1,
 
     //emission params
-    numParticles: 35,
+    numParticles: 30,
     loop: true,
     enable: false,
     emitRate: 0.02,

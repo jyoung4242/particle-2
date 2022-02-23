@@ -49,6 +49,8 @@ let magicParticleOptions = {
     transforms: {
         0: { type: 'size', time: { start: 0, end: 0.5 }, values: { start: { x: 1, y: 1 }, end: { x: 8, y: 8 } } },
         1: { type: 'size', time: { start: 0.5, end: 1 }, values: { start: { x: 8, y: 8 }, end: { x: 2, y: 2 } } },
+        2: { type: 'opacity', time: { start: 0.9, end: 1 }, values: { start: 1, end: 0 } },
+        3: { type: 'opacity', time: { start: 0, end: 0.9 }, values: { start: 1, end: 1 } },
     },
 };
 

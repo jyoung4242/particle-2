@@ -634,7 +634,7 @@ class ParticleEmitter {
             //gaurd condition for disabled emitters
             if (!this.isEnabled) return 1;
             //if not looping, update lifecycle timer
-            if (!this.loop) this.emitterLifecycleTimer += time;
+            if (this.lifespan) this.emitterLifecycleTimer += time;
 
             //******************************************************************** */
             // Check Emitter Lifespan
