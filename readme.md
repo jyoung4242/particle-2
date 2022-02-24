@@ -18,6 +18,7 @@
     -   [Bonfire Example](#bonfire-example)
     -   [Falling Snow Example](#snowfall-example)
     -   [Fireworks Example](#fireworks-example)
+    -   [Magic Spell Example](#magic-spell-example)
 -   [License](#license)
 
 ## Description
@@ -592,61 +593,72 @@ let particleSystemOptions = {
 
 ```js
 export let smokeEmitter = {
+    //general purpos params
     emitterLabel: 'smoke',
-    numParticles: 400,
-    burstCount: 1,
-    emittingLocation: {},
-    loop: true,
-    enable: false,
+    parentElement: 'divworld',
     shape: 'rectangle', // circle, rectangle
     region: 'area', //area|edge
     size: { x: 30, y: 25 },
     position: new Vector(550, 450),
-    emitRate: 0.5,
+    emittingPoint: new Vector(0, 0),
+    texture: '',
+    zindex: 1,
+    lifespan: -1,
+
+    //emission params
+    numParticles: 400,
+    loop: true,
+    enable: false,
+    emitRate: 0.05,
+    burstGap: 0,
+    burstCount: 1,
+
+    //passed functions
     particleOnCreate() {},
     particleOnDestroy() {},
-    initialVelocityTransform() {},
     particleOptions: smokeParticleOptions,
-    texture: '../assets/greensquare.png',
-    parentElement: 'divworld',
-    zindex: 1,
 };
 
 export let fireEmitter = {
+    //general purpos params
     emitterLabel: 'fire',
-    numParticles: 50,
-    burstCount: 1,
-    emittingLocation: {},
-    loop: true,
-    enable: false,
+    parentElement: 'divworld',
     shape: 'rectangle', // circle, rectangle
     region: 'area', //area|edge
     size: { x: 49, y: 25 },
     position: new Vector(565, 570),
-    emitRate: 0.2,
+    emittingPoint: new Vector(0, 0),
+    texture: '',
+    zindex: 1,
+    lifespan: -1,
+
+    //emission params
+    numParticles: 50,
+    loop: true,
+    enable: false,
+    emitRate: 0.02,
+    burstGap: 0,
+    burstCount: 1,
+
+    //passed functions
     particleOnCreate() {},
     particleOnDestroy() {},
-    initialVelocityTransform() {},
     particleOptions: fireParticleoptions,
-    texture: '../assets/greensquare.png',
-    parentElement: 'divworld',
-    zindex: 1,
 };
 ```
 
 #### Particles
 
 ```js
+//********************************* */
+//angle params (p,d,l,s)
+//velocity params (a,p,d,l,s)
+//zindex params (v,a,p,d,l,s)
+//********************************* */
 let smokeParticleOptions = {
-    texture: '../assets/smoke.png', //object for spritesheets, string for static image, or array of strings of images
-    animation: true,
-    animationObject: {
-        framePosition: new Vector(0, 0),
-        frameSize: new Vector(256, 256),
-        numRows: 7,
-        numCols: 7,
-        sequence: smokeAnimationSequence,
-    },
+    //general purpose params
+    parentElement: 'divworld',
+    emitterLabel: 'smoke',
     isLiving: true,
     loop: true,
     size: [
@@ -655,31 +667,46 @@ let smokeParticleOptions = {
         { x: 40, y: 40 },
         { x: 80, y: 80 },
         { x: 75, y: 75 },
-    ], //function, vector, array of vectors
+    ],
+    lifespan: [7, 7.25, 8.5, 8.75, 9, 9.5],
+
+    //positional and behavioral params
+    position: new Vector(),
     angle: 0,
-    angleVelocity: [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2], //array, number, function
-    velocity: function (a, p, d, s) {
+    angleVelocity: [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2],
+    velocity: function (a, p, d, l, s) {
         let x;
         x = Math.sin(degrees_to_radians(a) / 40);
         return { x: x, y: -1 };
-    }, //function, vector, array of vectors
-    position: new Vector(), //function, vector, array of vectors
-    clipString: '',
-    blendStrength: 50, //opacity of innerdiv
-    lifespan: [7, 7.25, 8.5, 8.75, 9, 9.5], //int, array, function
-    parentElement: 'divworld',
-    emitterLabel: 'smoke',
+    },
     zindex: 2,
-    gravity: 0, //int, array, function
+    gravity: 0,
+
+    //animation and texture params
+    texture: smokeball,
+    animation: true,
+    animationObject: {
+        framePosition: new Vector(0, 0),
+        frameSize: new Vector(256, 256),
+        numRows: 7,
+        numCols: 7,
+        sequence: smokeAnimationSequence,
+    },
+    clipString: '',
+    blendStrength: 50,
+
+    //transforms
     transforms: {
-        opacity: { time: { start: 0.1, end: 1 }, values: { start: 0.5, end: 0 } },
-        size: { time: { start: 1, end: 3 }, values: { start: 0.2, end: 1 } },
-    }, // "param": {time: {start: 0 end: 0}},{values: {start: 0, end: 0}};
+        0: { type: 'opacity', time: { start: 0.2, end: 1 }, values: { start: 1, end: 0 } },
+        1: { type: 'size', time: { start: 0.25, end: 1 }, values: { start: { x: 1, y: 1 }, end: { x: 4, y: 4 } } },
+        2: { type: 'opacity', time: { start: 0, end: 0.2 }, values: { start: 1, end: 1 } },
+    },
 };
 
 let fireParticleoptions = {
-    texture: '../assets/fire.png', //object for spritesheets, string for static image, or array of strings of images
-    animation: false,
+    //general purpose params
+    parentElement: 'divworld',
+    emitterLabel: 'fire',
     isLiving: true,
     loop: true,
     size: [
@@ -687,26 +714,33 @@ let fireParticleoptions = {
         { x: 15, y: 15 },
         { x: 20, y: 20 },
         { x: 10, y: 10 },
-    ], //function, vector, array of vectors
+    ],
+    lifespan: [0.75, 1.0, 0.5, 1.25, 1.5, 1.75],
+
+    //positional and behavioral params
+    position: new Vector(),
     angle: 0,
-    angleVelocity: [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2], //array, number, function
-    velocity: function (a, p, d, s) {
+    angleVelocity: [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2],
+    velocity: function (a, p, d, l, s) {
         let x;
-        x = Math.sin(degrees_to_radians(a) / 6);
+        x = 1.5 * Math.sin(degrees_to_radians(a * 2) / 6);
         return { x: x, y: -1 };
-    }, //function, vector, array of vectors
-    position: new Vector(), //function, vector, array of vectors
+    },
+    zindex: 2,
+    gravity: 0,
+
+    //animation and texture params
+    texture: fireball,
+    animation: false,
+    animationObject: {},
     clipString: '',
-    blendStrength: 50, //opacity of innerdiv
-    lifespan: [1, 1.25, 1.5, 1.75, 2, 2.5], //int, array, function
-    parentElement: 'divworld',
-    emitterLabel: 'fire',
-    zindex: 1,
-    gravity: 0, //int, array, function
+    blendStrength: 50,
+
+    //transforms
     transforms: {
-        opacity: { time: { start: 0.7, end: 1 }, values: { start: 0.8, end: 0 } },
-        size: { time: { start: 0.5, end: 1 }, values: { start: 1, end: 0.2 } },
-    }, // "param": {time: {start: 0 end: 0}},{values: {start: 0, end: 0}};
+        0: { type: 'size', time: { start: 0.8, end: 1 }, values: { start: { x: 1, y: 1 }, end: { x: 0.2, y: 0.2 } } },
+        1: { type: 'size', time: { start: 0, end: 0.8 }, values: { start: { x: 1.1, y: 1.1 }, end: { x: 1.1, y: 1.1 } } },
+    },
 };
 ```
 
@@ -715,34 +749,46 @@ let fireParticleoptions = {
 #### Emitters
 
 ```js
-let snowEmitterOptions = {
+export let snowEmitterOptions = {
+    //general purpos params
     emitterLabel: 'snowfall',
-    numParticles: 600,
-    burstCount: 1,
-    emittingLocation: new Vector(50, 50),
-    loop: true,
-    enable: false,
+    parentElement: 'divworld',
     shape: 'rectangle', // circle, rectangle
     region: 'area', //area|edge
     size: { x: '100%', y: 5 },
-    position: new Vector(0, 0),
-    emitRate: 50,
+    position: new Vector(0, -5),
+    emittingPoint: new Vector(0, 0),
+    texture: '',
+    zindex: 1,
+    lifespan: -1,
+
+    //emission params
+    numParticles: 600,
+    loop: true,
+    enable: false,
+    emitRate: 0.05,
+    burstGap: 0,
+    burstCount: 1,
+
+    //passed functions
     particleOnCreate() {},
     particleOnDestroy() {},
-    initialVelocityTransform() {},
     particleOptions: snowParticleOptions,
-    texture: {},
-    parentElement: 'divworld',
-    zindex: 1,
 };
 ```
 
 #### Particles
 
 ```js
+//********************************* */
+//angle params (p,d,l,s)
+//velocity params (a,p,d,l,s)
+//zindex params (v,a,p,d,l,s)
+//********************************* */
 let snowParticleOptions = {
-    texture: ['../assets/snowflake1.png', '../assets/snowflake2.png', '../assets/snowflake3.png'], //object for spritesheets, string for static image, or array of strings of images
-    animation: false,
+    //general purpose params
+    parentElement: 'divworld',
+    emitterLabel: 'snowfall',
     isLiving: true,
     loop: true,
     size: [
@@ -751,10 +797,14 @@ let snowParticleOptions = {
         { x: 20, y: 20 },
         { x: 10, y: 10 },
         { x: 30, y: 30 },
-    ], //function, vector, array of vectors
+    ],
+    lifespan: 32,
+
+    //positional and behavioral params
+    position: new Vector(),
     angle: 0,
-    angleVelocity: [-1, -0.5, -0.25, 0, 0.25, 0.5, 1], //array, number, function
-    velocity: function (a, p, d, s) {
+    angleVelocity: [-1, -0.5, -0.25, 0, 0.25, 0.5, 1],
+    velocity: function (a, p, d, l, s) {
         let x, y;
         let arry = {
             10: 0.35,
@@ -766,16 +816,19 @@ let snowParticleOptions = {
         y = arry[s.x];
         x = Math.sin(degrees_to_radians(a)) / 2;
         return { x: x, y: y };
-    }, //function, vector, array of vectors
-    position: new Vector(), //function, vector, array of vectors
-    clipString: '',
-    blendStrength: 100, //opacity of innerdiv
-    lifespan: 32, //int, array, function
-    parentElement: 'divworld',
-    emitterLabel: 'snowfall',
+    },
     zindex: 2,
-    gravity: 0, //int, array, function
-    transforms: {}, // "param": {time: {start: 0 end: 0}},{values: {start: 0, end: 0}};
+    gravity: 0,
+
+    //animation and texture params
+    texture: [snow1, snow2, snow3],
+    animation: false,
+    animationObject: {},
+    clipString: '',
+    blendStrength: 100,
+
+    //transforms
+    transforms: {},
 };
 ```
 
@@ -785,48 +838,59 @@ let snowParticleOptions = {
 
 ```js
 export let burstEmitterOptions = {
-    parentElement: 'divworld',
+    //general purpos params
     emitterLabel: 'burst',
-    emitterID: '',
-    numParticles: 100,
-    burstCount: 100,
-    emittingLocation: new Vector(0, 0),
-    loop: false,
-    lifespan: 6,
-    enable: false,
+    parentElement: 'divworld',
     shape: 'circle', // circle, rectangle
-    region: 'edge', //area|edge
-    size: { x: 10, y: 10 },
+    region: 'area', //area|edge
+    size: { x: 25, y: 25 },
     position: new Vector(0, 0),
-    emitRate: 1,
+    emittingPoint: new Vector(0, 0),
+    texture: {},
+    zindex: 1,
+    lifespan: 0.75,
+
+    //emission params
+    numParticles: 50,
+    loop: false,
+    enable: false,
+    emitRate: 0,
+    burstGap: -1,
+    burstCount: 50,
+
+    //passed functions
     particleOnCreate: part => {
         //based on position, set initial angle and velocity
         const cp = new Vector(myE.position.x + myE.size.x / 2, myE.position.y + myE.size.y / 2);
         let tempV = part.position.subtract(cp);
-        let rads = Math.atan2(tempV.y, tempV.x);
         part.startingAngle = Math.atan2(tempV.y, tempV.x);
     },
     particleOnDestroy() {},
-    initialVelocityTransform() {},
     particleOptions: burstParticleOptions,
-    texture: {},
-    zindex: 1,
 };
 
 export let fireworksEmitterOptions = {
-    parentElement: 'divworld',
+    //general purpos params
     emitterLabel: 'fireworks',
-    emitterID: '',
-    numParticles: 4,
-    burstCount: 1,
-    emittingLocation: {},
-    loop: true,
-    enable: false,
+    parentElement: 'divworld',
     shape: 'rectangle', // circle, rectangle
     region: 'area', //area|edge
     size: { x: '100%', y: 5 },
     position: new Vector(0, 695),
-    emitRate: 2000,
+    emittingPoint: new Vector(0, 0),
+    texture: {},
+    zindex: 1,
+    lifespan: -1,
+
+    //emission params
+    numParticles: 4,
+    loop: true,
+    enable: false,
+    emitRate: 2,
+    burstGap: 0,
+    burstCount: 1,
+
+    //passed functions
     particleOnCreate: part => {
         if (Math.random() * 5 > 2.5) {
             part.direction = 1;
@@ -839,26 +903,35 @@ export let fireworksEmitterOptions = {
         myE = divParticle.addEmitter(burstEmitterOptions);
         myE.enableEmitter();
     },
-    initialVelocityTransform() {},
     particleOptions: fireworksParticleOptions,
-    texture: {},
-    zindex: 1,
 };
 ```
 
 #### Particles
 
 ```js
+//********************************* */
+//angle params (p,d,l,s)
+//velocity params (a,p,d,l,s)
+//zindex params (v,a,p,d,l,s)
+//********************************* */
 let fireworksParticleOptions = {
+    //userdefined param
     dirction: 0,
-    texture: '', //object for spritesheets, string for static image, or array of strings of images
-    animation: false,
+
+    //general purpose params
+    parentElement: 'divworld',
+    emitterLabel: 'fireworks',
     isLiving: true,
     loop: false,
-    size: { x: 5, y: 5 }, //function, vector, array of vectors
+    size: [{ x: 5, y: 5 }],
+    lifespan: 3.75,
+
+    //positional and behavioral params
+    position: new Vector(),
     angle: 0,
-    angleVelocity: 0, //array, number, function
-    velocity: function (a, p, d, s) {
+    angleVelocity: 0,
+    velocity: function (a, p, d, l, s) {
         let x, y;
 
         if (this.direction == 1) x = 1;
@@ -868,34 +941,47 @@ let fireworksParticleOptions = {
         y = -6 + frameStep * 0.01;
 
         return { x: x, y: y };
-    }, //function, vector, array of vectors
-    position: new Vector(), //function, vector, array of vectors
-    clipString: 'circle(60%)',
-    blendStrength: 10, //opacity of innerdiv
-    lifespan: 3, //int, array, function
-    parentElement: 'divworld',
-    emitterLabel: 'fireworks',
-    emitterID: '',
-    particleID: '',
+    },
     zindex: 2,
-    gravity: 0.01, //int, array, function
+    gravity: 0.04,
+
+    //animation and texture params
+    texture: '',
+    animation: false,
+    animationObject: {},
+    clipString: 'circle(60%)',
+    blendStrength: 30,
+
+    //transforms
     transforms: {
-        color: { time: { start: 0, end: 1 }, values: { start: '#C63347', end: '#f5e028' } },
-    }, // "param": {time: {start: 0 end: 0}},{values: {start: 0, end: 0}};
+        0: { type: 'color', time: { start: 0, end: 1 }, values: { start: '#C63347', end: '#f5e028' } },
+    },
 };
 
+//********************************* */
+//angle params (p,d,l,s)
+//velocity params (a,p,d,l,s)
+//zindex params (v,a,p,d,l,s)
+//********************************* */
 let burstParticleOptions = {
+    //userdefined param
     startingAngle: 0,
     startcolor: '',
     stopcolor: '',
-    texture: '', //object for spritesheets, string for static image, or array of strings of images
-    animation: false,
+
+    //general purpose params
+    parentElement: 'divworld',
+    emitterLabel: 'burst',
     isLiving: true,
     loop: false,
-    size: { x: 5, y: 5 }, //function, vector, array of vectors
+    size: [{ x: 5, y: 5 }],
+    lifespan: 0.75,
+
+    //positional and behavioral params
+    position: new Vector(),
     angle: 0,
-    angleVelocity: 0, //array, number, function
-    velocity: function (a, p, d, s) {
+    angleVelocity: 0,
+    velocity: function (a, p, d, l, s) {
         let magnitude = 6;
         let x, y;
         if (this.startingAngle) {
@@ -908,19 +994,21 @@ let burstParticleOptions = {
         } else return { x: 0, y: 0 };
 
         return { x: x, y: y };
-    }, //function, vector, array of vectors
-    position: new Vector(), //function, vector, array of vectors
-    clipString: 'circle(60%)',
-    blendStrength: 5, //opacity of innerdiv
-    lifespan: 0.75, //int, array, function
-    parentElement: 'divworld',
-    emitterLabel: 'burst',
-    emitterID: '',
-    particleID: '',
+    },
     zindex: 2,
-    gravity: 0, //int, array, function
+    gravity: 0,
+
+    //animation and texture params
+    texture: '',
+    animation: false,
+    animationObject: {},
+    clipString: 'circle(60%)',
+    blendStrength: 10,
+
+    //transforms
     transforms: {
-        color: {
+        0: {
+            type: 'color',
             time: { start: 0, end: 1 },
             values: {
                 start: function () {
@@ -934,8 +1022,93 @@ let burstParticleOptions = {
                 },
             },
         },
-        opacity: { time: { start: 0.5, end: 1 }, values: { start: 1, end: 0 } },
-    }, // "param": {time: {start: 0 end: 0}},{values: {start: 0, end: 0}};
+        1: { type: 'opacity', time: { start: 0.5, end: 1 }, values: { start: 1, end: 0 } },
+    },
+};
+```
+
+### Magic Spell Example
+
+#### Emitters
+
+```js
+export let magicEmitterOptions = {
+    //general purpos params
+    emitterLabel: 'magic',
+    parentElement: 'divworld',
+    shape: 'point', // circle, rectangle
+    region: 'area', //area|edge
+    size: { x: 1, y: 1 },
+    position: new Vector(512, 430),
+    emittingPoint: new Vector(0, 0),
+    texture: {},
+    zindex: 2,
+    lifespan: -1,
+
+    //emission params
+    numParticles: 25,
+    loop: true,
+    enable: false,
+    emitRate: 0.1,
+    burstGap: 1,
+    burstCount: 5,
+
+    //passed functions
+    particleOnCreate() {},
+    particleOnDestroy() {},
+    particleOptions: magicParticleOptions,
+};
+```
+
+#### Particles
+
+```js
+let magicParticleOptions = {
+    //general purpose params
+    parentElement: 'divworld',
+    emitterLabel: 'magic',
+    isLiving: true,
+    loop: true,
+    size: [{ x: 10, y: 10 }],
+    lifespan: 7.5,
+
+    //positional and behavioral params
+    position: new Vector(),
+    angle: 0,
+    angleVelocity: -1,
+    velocity: function (a, p, d, l, s) {
+        let x, y;
+        if (Math.abs(a) > 360) {
+        }
+
+        y = a / 700;
+        x = (-20 * Math.sin(degrees_to_radians(a * 2))) / 6;
+        return { x: x, y: y };
+    },
+    zindex: function (v, a, p, d, l, s) {
+        let perc_life = d / l;
+        if (perc_life > 0.2 && perc_life < 0.4) {
+            return 1;
+        } else if (perc_life > 0.6 && perc_life < 0.8) {
+            return 1;
+        } else return 3;
+    },
+    gravity: 0,
+
+    //animation and texture params
+    texture: magicball,
+    animation: false,
+    animationObject: {},
+    clipString: '',
+    blendStrength: 100,
+
+    //transforms
+    transforms: {
+        0: { type: 'size', time: { start: 0, end: 0.5 }, values: { start: { x: 1, y: 1 }, end: { x: 8, y: 8 } } },
+        1: { type: 'size', time: { start: 0.5, end: 1 }, values: { start: { x: 8, y: 8 }, end: { x: 2, y: 2 } } },
+        2: { type: 'opacity', time: { start: 0.9, end: 1 }, values: { start: 1, end: 0 } },
+        3: { type: 'opacity', time: { start: 0, end: 0.9 }, values: { start: 1, end: 1 } },
+    },
 };
 ```
 
