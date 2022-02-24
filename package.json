@@ -1,6 +1,6 @@
 {
     "name": "dom-particle-system",
-    "version": "1.0.12",
+    "version": "1.0.13",
     "description": "A 20kb lightweight, fast & powerful JavaScript particle library. It allows for individual particle control, and complete emitter systems.  Can pass descrete values, arrays of values, or pass functions that control specific parameters",
     "main": "ParticleSystem.js",
     "scripts": {
@@ -24,14 +24,13 @@
         "url": "https://github.com/jyoung4242/particle-2/issues"
     },
     "homepage": "https://github.com/jyoung4242/particle-2#readme",
-    "dependencies": {
+    "dependencies": {},
+    "devDependencies": {
+        "webpack-dev-server": "^4.7.4",
         "css-loader": "^6.6.0",
         "html-webpack-plugin": "^5.5.0",
         "style-loader": "^3.3.1",
         "webpack": "^5.69.1",
         "webpack-cli": "^4.9.2"
-    },
-    "devDependencies": {
-        "webpack-dev-server": "^4.7.4"
     }
 }
